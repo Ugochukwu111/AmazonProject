@@ -1,3 +1,5 @@
+import {Cart, addToCart} from '../data/cart.js';
+import { products } from '../data/products.js';
 
 
 let productHTML = '';
@@ -54,49 +56,32 @@ products.forEach((product)=>{
           </button>
         </div>
   `;
-
-  
+ 
 })
 
 document.querySelector('.js-products-grid').innerHTML = productHTML ;
 
-document.querySelectorAll('.js-add-to-cart')
-.forEach((button)=>{
-  button.addEventListener('click', ()=>{
-   const productId = button.dataset.productId;
-
-   let matchingItem
-
-   //code below chents if the quatity is in the cart
-   // before , if it is ? increase the quantity if not add new obj
-   Cart.forEach((item)=>{
-    if (productId === item.productId){
-      matchingItem = item;
-
-    }
-   });
-
-   if(matchingItem){
-    matchingItem.quantity +=1
-   }else{
-     Cart.push(
-    {
-      productId: productId,
-      quantity: 1
-    }
-   );
-   };
 
 
+function updateCartquantity(){
   //  code below caluate the cart quantity and displays it
    let CartQuantity = 0;
-   Cart.forEach((item)=>{
-   CartQuantity += item.quantity;
+   Cart.forEach((cartItem)=>{
+   CartQuantity += cartItem.quantity;
     
    });
 
    document.querySelector('.js-cart-quantity')
    .innerHTML = CartQuantity;
 
-  })
-})
+}
+
+document.querySelectorAll('.js-add-to-cart')
+.forEach((button)=>{
+  button.addEventListener('click', ()=>{
+   const productId = button.dataset.productId;
+    addToCart(productId);
+    updateCartquantity();
+
+  });
+});
