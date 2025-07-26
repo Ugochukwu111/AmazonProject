@@ -1,4 +1,4 @@
-import {Cart, removeFromCart} from '../data/cart.js';
+import {Cart, removeFromCart, updateDeliveryOption} from '../data/cart.js';
 import { products } from '../data/products.js';
 import { formartCurrency } from './utilis/money.js'
 import {hello} from 'https://unpkg.com/supersimpledev@1.0.1/hello.esm.js';
@@ -6,36 +6,38 @@ import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
 import { deliveryOPtions } from '../data/deliveryOPtions.js'
 
 
-const today = dayjs();
-const deliveryDate = today.add(7, 'days');
-console.log(deliveryDate.format('dddd, MMMM D'))
+// const today = dayjs();
+// const deliveryDate = today.add(7, 'days');
+// console.log(deliveryDate.format('dddd, MMMM D'))
 
 
 let cartSummaryHTML = '';
 
 Cart.forEach((cartItem)=>{
-
   const productId = cartItem.productId;
 
    let matchingProduct = products.find((p)=>{ return p.id === productId});
+
 
   
    const deliveryOptionId = cartItem.deliveryOPtionsId;
     let deliveryOption;
 
-
     deliveryOPtions.forEach((option)=>{
       if (option.id === deliveryOptionId){
         deliveryOption = option;
+        console.log(deliveryOption)
       }
+
     });
 
-      const today = dayjs();
+    
+   const today = dayjs();
     const deliveryDate = today.add(
       deliveryOption.deliveryDays, 'days'
     );
-
     const dateString = deliveryDate.format('dddd, MMMM D' );
+
 
    cartSummaryHTML += `
         <div class="cart-item-container js-cart-item-container-${matchingProduct.id}">
@@ -100,7 +102,9 @@ function deliveryOPtionsHTML(matchingProduct, cartItem) {
 
 
    html +=   `
-                <div class="delivery-option">
+                <div class="delivery-option js-delivery-option"
+                data-product-id = "${matchingProduct.id}"
+                data-delivery-option-id = "${deliveryOption.id}">
                   <input type="radio" ${isChecked ? 'checked' : ''}
                     class="delivery-option-input"
                     name="delivery-option-${matchingProduct.id}">
@@ -135,3 +139,12 @@ document.querySelectorAll('.js-delete-quantity-link')
       container.remove();
     });
 });
+
+document.querySelectorAll('.js-delivery-option')
+.forEach((element)=>{
+    element.addEventListener('click', ()=>{
+      const {productId, deliveryOptionId} = element.dataset;
+      console.log(productId, deliveryOptionId) 
+      updateDeliveryOption(productId , deliveryOptionId);
+    })
+})

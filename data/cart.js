@@ -6,6 +6,7 @@ export let Cart = JSON.parse(localStorage.getItem('Cart'));
           quantity: 2,
           deliveryOPtionsId: '1',
         },
+ 
         {
           productId: "15b6fc6f-327a-4ec4-896f-486349e85a3d",
           quantity: 2,
@@ -55,6 +56,21 @@ export function removeFromCart(productId){
    });
 
    Cart = newCart;
+
+   saveToStorage();
+}
+
+
+export function updateDeliveryOption(productId, deliveryOptionId){
+  let matchingItem;
+   Cart.forEach((cartItem)=>{
+    if (productId === cartItem.productId){
+      matchingItem = cartItem;
+
+    }
+   });
+
+   matchingItem.deliveryOPtionsId = deliveryOptionId;
 
    saveToStorage();
 }
