@@ -1,4 +1,4 @@
-import {formartCurrency} from '../scripts/utilis/money.js';
+import {formartCurrency} from '../../scripts/utilis/money.js';
 
 describe('test suite: formart currency', ()=>{
   it('converts cents into dollars', () => {
