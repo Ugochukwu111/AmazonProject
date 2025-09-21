@@ -1,4 +1,4 @@
-import {formartCurrency} from '../scripts/utilis/money.js';
+import {formartCurrency} from '../../scripts/utilis/money.js';
 
 
 console.log('test suite: formartCurrency');
