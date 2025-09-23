@@ -1,11 +1,13 @@
-export let Cart ;
 
-loadFromStorage();
+function Cart(localStorageKey) {
+  const cart = {
+   CartItems: undefined,
 
-  export function loadFromStorage(){
-   Cart = JSON.parse(localStorage.getItem('Cart'));
-   if (!Cart){
- Cart = [ 
+    loadFromStorage(){
+   this.CartItems = JSON.parse(localStorage.getItem(localStorageKey));
+
+   if (!this.CartItems){
+    this.CartItems = [ 
         {
           productId: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
           quantity: 2,
@@ -19,18 +21,15 @@ loadFromStorage();
         },
 ];
    }
-   }
-
-export function saveToStorage(){
-  localStorage.setItem('Cart', JSON.stringify(Cart))
-}
-
-
-export function  addToCart(productId){
+   },
+   saveToStorage() {
+  localStorage.setItem(localStorageKey, JSON.stringify(this.CartItems))
+},
+addToCart(productId){
      let matchingItem;
    //code below chents if the quatity is in the cart
    // before , if it is ? increase the quantity if not add new obj
-   Cart.forEach((cartItem)=>{
+   this.CartItems.forEach((cartItem)=>{
     if (productId === cartItem.productId){
       matchingItem = cartItem;
 
@@ -40,43 +39,57 @@ export function  addToCart(productId){
    if(matchingItem){
     matchingItem.quantity +=1
    }else{
-     Cart.push(
+     this.CartItems.push(
     {
       productId: productId,
       quantity: 1,
       deliveryOPtionsId: '1',
     }
    );
-   saveToStorage()
+   this.saveToStorage()
    };
 
-}
-
-export function removeFromCart(productId){
+},
+ removeFromCart(productId){
    let newCart = [];
 
-   Cart.forEach((cartItem)=>{
+   this.CartItems.forEach((cartItem)=>{
        if(cartItem.productId !== productId){
          newCart.push(cartItem);
        }
    });
 
-   Cart = newCart;
+   this.CartItems = newCart;
 
-   saveToStorage();
-}
+   this.saveToStorage();
+},
 
-
-export function updateDeliveryOption(productId, deliveryOptionId){
+ updateDeliveryOption(productId, deliveryOptionId){
   let matchingItem;
-   Cart.forEach((cartItem)=>{
+   this.CartItems.forEach((cartItem)=>{
     if (productId === cartItem.productId){
       matchingItem = cartItem;
-
     }
    });
 
    matchingItem.deliveryOPtionsId = deliveryOptionId;
 
-   saveToStorage();
+   this.saveToStorage();
 }
+
+};
+
+return cart;
+}
+const cart = Cart('cart-oop');
+const businessCart = Cart('cart-business');
+
+cart.loadFromStorage();
+cart.addToCart();
+
+businessCart.loadFromStorage();
+
+
+
+console.log(cart , businessCart)
+
