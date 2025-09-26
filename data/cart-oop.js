@@ -91,5 +91,3 @@ businessCart.loadFromStorage();
 
 
 
-console.log(cart , businessCart)
-
